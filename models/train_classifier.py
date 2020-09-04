@@ -35,7 +35,7 @@ def load_data(database_filename: str) -> (np.array, pd.DataFrame, [str]):
     database_filename = re.sub('\.db$', '', database_filename)
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
     database_name = os.path.basename(database_filename)
-    df = pd.read_sql_table(database_name, engine).head(10)
+    df = pd.read_sql_table(database_name, engine)
     
     messages = df['message'].values
     categories = df.drop(['id', 'genre', 'message', 'original'], axis=1)
