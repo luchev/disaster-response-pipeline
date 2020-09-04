@@ -147,19 +147,7 @@ def build_model_ada_boost(cpus: int = 1):
         ('multiout', MultiOutputClassifier(AdaBoostClassifier()))
     ])
 
-    parameters = {
-        'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'vector__stop_words': (None, 'english'),
-        'tfidf__sublinear_tf': (True, False),
-        'tfidf__use_idf': (True, False),
-        'multiout__estimator__n_estimators': (25, 50, 100),
-        'multiout__estimator__algorithm': ('SAMME', 'SAMME.R'),
-        'multiout__n_jobs': [cpus],
-    }
-
-    cv = GridSearchCV(pipeline, param_grid=parameters)
-
-    return cv
+    return pipeline
 
 
 def build_model_mlp(cpus: int = 1):
