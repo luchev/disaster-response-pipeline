@@ -2,8 +2,15 @@ import sys
 import pandas as pd
 from sqlalchemy import create_engine
 
-def load_data(messages_filepath, categories_filepath):
-    """TODO: Add docstring
+def load_data(messages_filepath: str, categories_filepath: str) -> pd.DataFrame:
+    """ Load 2 csv files as dataframes and join them into 1 dataframe
+    
+    Args:
+        messages_filepath (str): path to the messages CSV file
+        categories_filepath (str): path to the categories CSV file
+
+    Returns:
+        pd.DataFrame: The two files merged as one dataframe
     """
     messages_df = pd.read_csv(messages_filepath)
     categories_df = pd.read_csv(categories_filepath)
@@ -11,8 +18,15 @@ def load_data(messages_filepath, categories_filepath):
     return pd.merge(messages_df, categories_df, how='inner', on=['id'])
 
 
-def clean_data(df):
-    """TODO: Add docstring
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+    """ Clean and wrangle a dataframe
+
+    Args:
+        df (pd.DataFrame): dataframe to clean
+    
+    Returns:
+        pd.DataFrame: dataframe where the categories column has been replaced
+            by multiple boolean columns, one column per category
     """
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
@@ -30,8 +44,12 @@ def clean_data(df):
     return df
 
 
-def save_data(df, database_filename):
-    """TODO: Add docstring
+def save_data(df: pd.DataFrame, database_filename: str) -> None:
+    """ Save a dataframe to a database
+
+    Args:
+        df (pd.DataFrame): dataframe to save
+        database_filename (str): database name, also used for the sql file name
     """
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
     df.to_sql('{}'.format(database_filename), engine, index=False) 
