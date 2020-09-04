@@ -95,6 +95,14 @@ def build_model(cpus: int = 1):
     return cv
 
 def evaluate_model(model: Pipeline, X_test: np.array, Y_test: pd.DataFrame, category_names: str) -> None:
+    """ Output model precision and f1 score for all categories to the stdout
+
+    Args:
+        model (Pipeline): Model to use when fitting the data
+        X_test (List[str]): Input messages to predict categories for
+        Y_test (pd.DataFrame): Actual categories for all messages
+        category_names (List[str]): List with the category names
+    """
     Y_predicted = model.predict(X_test)
     for index, column in enumerate(category_names):
         print('Category', index + 1, column + ':')
@@ -129,7 +137,7 @@ def main():
         evaluate_model(model, X_test, Y_test, category_names)
 
         print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        # save_model(model, model_filepath)
+        save_model(model, model_filepath)
 
         print('Trained model saved!')
 
