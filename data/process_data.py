@@ -1,6 +1,11 @@
+#!python3
+
+import re
+import os
 import sys
 import pandas as pd
 from sqlalchemy import create_engine
+
 
 def load_data(messages_filepath: str, categories_filepath: str) -> pd.DataFrame:
     """ Load 2 csv files as dataframes and join them into 1 dataframe
@@ -51,8 +56,10 @@ def save_data(df: pd.DataFrame, database_filename: str) -> None:
         df (pd.DataFrame): dataframe to save
         database_filename (str): database name, also used for the sql file name
     """
+    database_filename = re.sub('\.db$', '', database_filename)
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
-    df.to_sql('{}'.format(database_filename), engine, index=False) 
+    database_name = os.path.basename(database_filename)
+    df.to_sql(database_name, engine, index=False) 
 
 
 def main():
