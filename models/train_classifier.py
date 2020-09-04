@@ -268,14 +268,19 @@ def main():
 
         print('Building model...')
         if model_type == 'randomforest':
+            print('Using RandomForest classifier...')
             model = build_model_random_forest()
         elif model_type == 'adaboost':
+            print('Using AdaBoost classifier...')
             model = build_model_ada_boost()
         elif model_type == 'mlp':
+            print('Using MLP classifier')
             model = build_model_mlp()
         elif model_type == 'kneighbours':
+            print('Using KNeighbours classifier')
             model = build_model_kneighbours()
         elif model_type == 'decisiontree':
+            print('Using DecisionTree classifier')
             model = build_model_decisiontree()
         else:
             print('Fatal error: Invalid model type selected. Try one of randomforest/adaboost/mlp/kneighbours/decisiontree')
