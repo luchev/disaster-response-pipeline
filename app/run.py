@@ -32,10 +32,22 @@ engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('DisasterResponse', engine)
 
 # load models
-modelAdaBoost = pickle.load(open('../models/adaboost.pkl', 'rb'))
-modelRandomForest = pickle.load(open('../models/randomforest.pkl', 'rb'))
-modelKNeighbours = pickle.load(open('../models/kneighbours.pkl', 'rb'))
-modelDecisionTree = pickle.load(open('../models/decisiontree.pkl', 'rb'))
+try:
+    modelAdaBoost = pickle.load(open('../models/adaboost.pkl', 'rb'))
+except:
+    pass
+try:
+    modelRandomForest = pickle.load(open('../models/randomforest.pkl', 'rb'))
+except:
+    pass
+try:
+    modelKNeighbours = pickle.load(open('../models/kneighbours.pkl', 'rb'))
+except:
+    pass
+try:
+    modelDecisionTree = pickle.load(open('../models/decisiontree.pkl', 'rb'))
+except:
+    pass
 # modelMlp = pickle.load(open('../models/mlp.pkl', 'rb'))
 
 # index webpage displays cool visuals and receives user input text for model
@@ -96,13 +108,28 @@ def go():
     query = request.args.get('query', '') 
 
     # Use model to predict classification for query
-    results = [
-        ('K Neighbours', predict_for_html(modelKNeighbours, query)),
-        ('Ada Boost', predict_for_html(modelAdaBoost, query)),
-        ('Random Forest', predict_for_html(modelRandomForest, query)),
-        ('Decision Tree', predict_for_html(modelDecisionTree, query)),
-        # ('MLP', predict_for_html(modelMlp, query)),
-    ]
+    results = []
+
+    try:
+        results.append(
+            ('K Neighbours', predict_for_html(modelKNeighbours, query)))
+    except:
+        pass
+    try:
+        results.append(
+            ('Ada Boost', predict_for_html(modelAdaBoost, query)))
+    except:
+        pass
+    try:
+        results.append(
+            ('Random Forest', predict_for_html(modelRandomForest, query)))
+    except:
+        pass
+    try:
+        results.append(
+            ('Decision Tree', predict_for_html(modelDecisionTree, query)))
+    except:
+        pass
 
     # This will render the go.html 
     return render_template(
