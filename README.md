@@ -1,6 +1,6 @@
 # Disaster Response Pipeline Project
 
-This project builds an ETL pipeline to process disaster response messages and their categories. Then uses a ML pipeline to build a model to predict the category of messages, which can be entered by the user in a web UI.
+This project builds an ETL pipeline to process disaster response messages and their categories. Then uses a ML pipeline to build a model to predict the category of messages, which can be entered by the user in a web UI. Check it out on https://disasterresponsepipeline.herokuapp.com/
 
 ## Dependencies
 
@@ -42,11 +42,16 @@ pip install -r requirements.txt
 
 ### Using pre-trained model
 
-The project comes with wrangled data and pre-trained models. If you want to use the pre-trained models you can just run the webserver inside the app directory:
+The project comes with wrangled data and pre-trained models. If you want to use the pre-trained models you can just run the webserver:
 
 ```
-cd app
 python3 run.py
+```
+
+or
+
+```
+./runFlask.sh
 ```
 
 Then go to http://0.0.0.0:3001/ to see the running project.
@@ -61,7 +66,7 @@ If you want to train your own models on custom dataset you will have to update t
 - To run ML pipeline that trains classifier and saves
     `python3 models/train_classifier.py <DatabasePath>.db <ModelPath>.pkl [ModelClassifier]`
 
-There are 5 classifiers you can use:
+There are 4 classifiers you can use:
 - RandomForest (default)
 - AdaBoost
 - KNeighbours
