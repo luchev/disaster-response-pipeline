@@ -67,7 +67,7 @@ def tokenize(text: str) -> [str]:
     return tokens
 
 
-def build_model_kneighbours(cpus: int = 1):
+def build_model_kneighbours():
     """ Build a TF IDF model using KNeighbours classifier
 
     Args:
@@ -85,13 +85,11 @@ def build_model_kneighbours(cpus: int = 1):
 
     parameters = {
         'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'vector__stop_words': (None, 'english'),
-        'tfidf__sublinear_tf': (True, False),
-        'tfidf__use_idf': (True, False),
-        'multiout__estimator__leaf_size': (10, 30, 50),
-        'multiout__estimator__weights': ('uniform', 'distance'),
-        'multiout__estimator__n_jobs': [cpus],
-        'multiout__n_jobs': [cpus],
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__leaf_size': (10, 30, 50),
+        # 'multiout__estimator__weights': ('uniform', 'distance'),
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
@@ -99,7 +97,7 @@ def build_model_kneighbours(cpus: int = 1):
     return cv
 
 
-def build_model_random_forest(cpus: int = 1):
+def build_model_random_forest():
     """ Build a TF IDF model using RandomForest classifier
 
     Args:
@@ -117,13 +115,12 @@ def build_model_random_forest(cpus: int = 1):
 
     parameters = {
         'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'vector__stop_words': (None, 'english'),
-        'tfidf__sublinear_tf': (True, False),
-        'tfidf__use_idf': (True, False),
-        'multiout__estimator__criterion': ('gini', 'entropy'),
-        'multiout__estimator__n_estimators': (50, 100, 200),
-        'multiout__estimator__min_weight_fraction_leaf': (0, 0.1, 0.5),
-        'multiout__n_jobs': [cpus],
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__criterion': ('gini', 'entropy'),
+        # 'multiout__estimator__n_estimators': (50, 100, 200),
+        # 'multiout__estimator__min_weight_fraction_leaf': (0, 0.1, 0.5),
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
@@ -131,7 +128,37 @@ def build_model_random_forest(cpus: int = 1):
     return cv
 
 
-def build_model_ada_boost(cpus: int = 1):
+def build_model_gaussian():
+    """ Build a TF IDF model using Gaussian classifier
+
+    Args:
+        cpus (int): Number of CPUs to use when fitting the model
+            Default is 1. Set cpus to -1 if you want to use all available
+
+    Returns:
+        GridSearchCV: Multi output ML model
+    """
+    pipeline = Pipeline([
+        ('vector', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('multiout', MultiOutputClassifier(GaussianProcessClassifier()))
+    ])
+
+    parameters = {
+        'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__max_iter_predict': (50, 100, 200),
+        # 'multiout__estimator__multi_class': ('one_vs_rest', 'one_vs_one'),
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+
+    return cv
+
+
+def build_model_ada_boost():
     """ Build a TF IDF model using AdaBoost classifier
 
     Args:
@@ -147,10 +174,21 @@ def build_model_ada_boost(cpus: int = 1):
         ('multiout', MultiOutputClassifier(AdaBoostClassifier()))
     ])
 
-    return pipeline
+    parameters = {
+        'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__n_estimators': (25, 50, 100),
+        # 'multiout__estimator__algorithm': ('SAMME', 'SAMME.R'),
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+
+    return cv
 
 
-def build_model_mlp(cpus: int = 1):
+def build_model_mlp():
     """ Build a TF IDF model using MLP classifier
 
     Args:
@@ -168,14 +206,13 @@ def build_model_mlp(cpus: int = 1):
 
     parameters = {
         'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'vector__stop_words': (None, 'english'),
-        'tfidf__sublinear_tf': (True, False),
-        'tfidf__use_idf': (True, False),
-        'multiout__estimator__learning_rate': ('constant', 'invscaling', 'adaptive'),
-        'multiout__estimator__solver': ('lbfgs', 'sdg', 'adam'),
-        'multiout__estimator__activation': ('identity', 'logistic', 'tanh', 'relu'),
-        'multiout__estimator__hidden_layer_sizes': ((50,), (100,), (200,)),
-        'multiout__n_jobs': [cpus],
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__learning_rate': ('constant', 'invscaling', 'adaptive'),
+        # 'multiout__estimator__solver': ('lbfgs', 'sdg', 'adam'),
+        # 'multiout__estimator__activation': ('identity', 'logistic', 'tanh', 'relu'),
+        # 'multiout__estimator__hidden_layer_sizes': ((50,), (100,), (200,)),
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
@@ -183,7 +220,7 @@ def build_model_mlp(cpus: int = 1):
     return cv
 
 
-def build_model_decisiontree(cpus: int = 1):
+def build_model_decisiontree():
     """ Build a TF IDF model using Decision Tree classifier
 
     Args:
@@ -201,13 +238,12 @@ def build_model_decisiontree(cpus: int = 1):
 
     parameters = {
         'vector__ngram_range': ((1, 1), (1, 2), (1, 3)),
-        'vector__stop_words': (None, 'english'),
-        'tfidf__sublinear_tf': (True, False),
-        'tfidf__use_idf': (True, False),
-        'multiout__estimator__criterion': ('gini', 'entropy'),
-        'multiout__estimator__splitter': ('best', 'random'),
-        'multiout__estimator__max_depth': (None, 10, 50),
-        'multiout__n_jobs': [cpus],
+        # 'vector__stop_words': (None, 'english'),
+        # 'tfidf__sublinear_tf': (True, False),
+        # 'tfidf__use_idf': (True, False),
+        # 'multiout__estimator__criterion': ('gini', 'entropy'),
+        # 'multiout__estimator__splitter': ('best', 'random'),
+        # 'multiout__estimator__max_depth': (None, 10, 50),
     }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
@@ -261,9 +297,6 @@ def main():
         elif model_type == 'adaboost':
             print('Using AdaBoost classifier...')
             model = build_model_ada_boost()
-        elif model_type == 'mlp':
-            print('Using MLP classifier')
-            model = build_model_mlp()
         elif model_type == 'kneighbours':
             print('Using KNeighbours classifier')
             model = build_model_kneighbours()
@@ -271,7 +304,7 @@ def main():
             print('Using DecisionTree classifier')
             model = build_model_decisiontree()
         else:
-            print('Fatal error: Invalid model type selected. Try one of randomforest/adaboost/mlp/kneighbours/decisiontree')
+            print('Fatal error: Invalid model type selected. Try one of randomforest/adaboost/kneighbours/decisiontree')
             exit(1)
         
         print('Training model...')
