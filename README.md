@@ -2,6 +2,16 @@
 
 This project builds an ETL pipeline to process disaster response messages and their categories. Then uses a ML pipeline to build a model to predict the category of messages, which can be entered by the user in a web UI. Check it out on https://disasterresponsepipeline.herokuapp.com/
 
+The UI shows what categories the model predicted for the inputted message, by using 4 different ML models. This allows for better predictions and comparison between the models.
+
+Here's a few examples
+
+![](https://i.imgur.com/cLP6DiS.png)
+
+![](https://i.imgur.com/ZCq0icm.png)
+
+![](https://i.imgur.com/Qv9fFX9.png)
+
 ## Dependencies
 
 To run the project you need `python3` and `pip` installed. The full list of dependencies can be found in the `requirements.txt`.
