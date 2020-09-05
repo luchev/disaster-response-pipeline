@@ -31,9 +31,12 @@ def tokenize(text):
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('DisasterResponse', engine)
 
-# load model
-model = pickle.load(open('../models/DisasterResponseClassifier.pkl', 'rb'))
-
+# load models
+modelAdaBoost = pickle.load(open('../models/adaboost.pkl', 'rb'))
+modelRandomForest = pickle.load(open('../models/randomforest.pkl', 'rb'))
+modelKNeighbours = pickle.load(open('../models/kneighbours.pkl', 'rb'))
+modelDecisionTree = pickle.load(open('../models/decisiontree.pkl', 'rb'))
+# modelMlp = pickle.load(open('../models/mlp.pkl', 'rb'))
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
@@ -78,6 +81,14 @@ def index():
             category_count=len(category_names))
 
 
+def predict_for_html(model, message):
+    classification_labels = model.predict([message])[0]
+    classification_results = list(zip(df.columns[4:], classification_labels))
+    classification_results = sorted(classification_results, key=itemgetter(0))
+    classification_results = sorted(classification_results, key=itemgetter(1), reverse=True)
+
+    return classification_results
+
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
@@ -85,16 +96,19 @@ def go():
     query = request.args.get('query', '') 
 
     # Use model to predict classification for query
-    classification_labels = model.predict([query])[0]
-    classification_results = list(zip(df.columns[4:], classification_labels))
-    classification_results = sorted(classification_results, key=itemgetter(0))
-    classification_results = sorted(classification_results, key=itemgetter(1), reverse=True)
-    
-    # This will render the go.html Please see that file. 
+    results = [
+        ('K Neighbours', predict_for_html(modelKNeighbours, query)),
+        ('Ada Boost', predict_for_html(modelAdaBoost, query)),
+        ('Random Forest', predict_for_html(modelRandomForest, query)),
+        ('Decision Tree', predict_for_html(modelDecisionTree, query)),
+        # ('MLP', predict_for_html(modelMlp, query)),
+    ]
+
+    # This will render the go.html 
     return render_template(
         'go.html',
         query=query,
-        classification_result=classification_results
+        results=results,
     )
 
 
