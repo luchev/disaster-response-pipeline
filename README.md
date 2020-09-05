@@ -64,7 +64,6 @@ If you want to train your own models on custom dataset you will have to update t
 There are 5 classifiers you can use:
 - RandomForest (default)
 - AdaBoost
-- MLP
 - KNeighbours
 - DecisionTree
 
