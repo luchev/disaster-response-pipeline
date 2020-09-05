@@ -1,3 +1,2 @@
-cd $( dirname $0 )/app/
-source ../venv/bin/activate
+source $( dirname $0 )/venv/bin/activate
 python3 run.py
